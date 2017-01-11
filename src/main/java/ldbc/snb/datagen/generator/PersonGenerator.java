@@ -89,11 +89,11 @@ public class PersonGenerator {
                 person.gender() == 1,
                 Dictionaries.dates.getBirthYear(person.birthDay())));
 	if (richRdf) {
-	    person.firstNameKnown(randomFarm.get(RandomGeneratorFarm.Aspect.NAME_KNOWN).nextDouble() > 0.95);
+	    person.firstNameKnown(randomFarm.get(RandomGeneratorFarm.Aspect.NAME_KNOWN).nextDouble() > 0.05);
 	}
         person.lastName(Dictionaries.names.getRandomSurname(randomFarm.get(RandomGeneratorFarm.Aspect.SURNAME), person.countryId()));
 	if (richRdf) {
-	    person.lastNameKnown(randomFarm.get(RandomGeneratorFarm.Aspect.SURNAME_KNOWN).nextDouble() > 0.95);
+	    person.lastNameKnown(randomFarm.get(RandomGeneratorFarm.Aspect.SURNAME_KNOWN).nextDouble() > 0.05);
 	}
 
         int numEmails = randomFarm.get(RandomGeneratorFarm.Aspect.EXTRA_INFO).nextInt(DatagenParams.maxEmails) + 1;

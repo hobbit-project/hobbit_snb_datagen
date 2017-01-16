@@ -154,16 +154,16 @@ def main(argv=None):
 		selectedPersonParams[i] = discoverparams.generate(factors)
 
 	# Queries 13 and 14 take two person parameters each. Generate pairs
-	secondPerson = {}
-	for i in [13, 14]:
-		secondPerson[i] = []
-		for person in selectedPersonParams[i]:
-			j = 0
-			while True:
-				j = random.randint(0, len(selectedPersonParams[i])-1)
-				if selectedPersonParams[i][j] != person:
-					break
-			secondPerson[i].append(selectedPersonParams[i][j])
+#	secondPerson = {}
+#	for i in [13, 14]:
+#		secondPerson[i] = []
+#		for person in selectedPersonParams[i]:
+#			j = 0
+#			while True:
+#				j = random.randint(0, len(selectedPersonParams[i])-1)
+#				if selectedPersonParams[i][j] != person:
+#					break
+#			secondPerson[i].append(selectedPersonParams[i][j])
 
 	# find country parameters for Query 3 and 11
 	print "find parameter bindings for Countries"
@@ -221,9 +221,10 @@ def main(argv=None):
 		newlen = len(selectedPersonParams[i])
 		selectedTagTypeParams[i].extend([selectedTagTypeParams[i][random.randint(0, oldlen-1)] for j in range(newlen-oldlen)])
 
-	# find time parameters for Queries 2,3,4,5,9
+	# find time parameters for Queries 2,3,4,5,9,13,14
 	selectedPersons = selectedPersonParams[2] + selectedPersonParams[3]+selectedPersonParams[4]
 	selectedPersons += selectedPersonParams[5] + selectedPersonParams[9]
+        selectedPersons += selectedPersonParams[13] + selectedPersonParams[14]
 
 	selectedTimeParams = {}
 	timeSelectionInput = {
@@ -231,7 +232,9 @@ def main(argv=None):
 		3: (selectedPersonParams[3], "ff", getTimeParamsWithMedian),
 		4: (selectedPersonParams[4], "f", getTimeParamsWithMedian),
 		5: (selectedPersonParams[5], "ffg", getTimeParamsAfterMedian),
-		9: (selectedPersonParams[9], "ff", getTimeParamsBeforeMedian)
+		9: (selectedPersonParams[9], "ff", getTimeParamsBeforeMedian),
+                13: (selectedPersonParams[13], "f", getTimeParamsAfterMedian),
+                14: (selectedPersonParams[14], "f", getTimeParamsAfterMedian)
 		#11: (selectedPersonParams[11], "w", getTimeParamsBeforeMedian) # friends of friends work
 	}
 
@@ -268,8 +271,8 @@ def main(argv=None):
 	for i in range(1,15):
 		csvWriter = CSVSerializer()
 		csvWriter.setOutputFile(outdir+"query_%d_param.txt"%(i))
-		if i != 13 and i != 14: # these three queries take two Persons as parameters
-			csvWriter.registerHandler(handlePersonParam, selectedPersonParams[i], "Person")
+#		if i != 13 and i != 14: # these three queries take two Persons as parameters
+                csvWriter.registerHandler(handlePersonParam, selectedPersonParams[i], "Person")
 		csvWriters[i] = csvWriter
 
 	# add output for Time parameter
@@ -287,8 +290,8 @@ def main(argv=None):
 	csvWriters[11].registerHandler(handleCountryParam, selectedCountryParams[11],"Country")
 	csvWriters[11].registerHandler(handleWorkYearParam, selectedTimeParams[11],"Year")
 	csvWriters[12].registerHandler(handleTagTypeParam, selectedTagTypeParams[12],"TagType")
-	csvWriters[13].registerHandler(handlePairPersonParam, zip(selectedPersonParams[13], secondPerson[13]),"Person1|Person2")
-	csvWriters[14].registerHandler(handlePairPersonParam, zip(selectedPersonParams[14], secondPerson[14]),"Person1|Person2")
+#	csvWriters[13].registerHandler(handlePairPersonParam, zip(selectedPersonParams[13], secondPerson[13]),"Person1|Person2")
+#	csvWriters[14].registerHandler(handlePairPersonParam, zip(selectedPersonParams[14], secondPerson[14]),"Person1|Person2")
 
 
 	for j in csvWriters:
